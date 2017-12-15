@@ -3,6 +3,7 @@ package vista;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -30,7 +31,7 @@ public class Ventana extends JFrame implements ActionListener {
 	private JMenuItem mnuVentanpais, mnuVentanaC, mnuVentanaD, mnuIdiom, mnuVentanaE, mnuVentanaA, mnuVentanaF, mnuSalir, idiomaen,
 			idiomaes;
 
-	public Ventana() {
+	public Ventana() throws IOException {
 		initComponents();
 		ga = new GestionA();
 		gd = new GestionD();

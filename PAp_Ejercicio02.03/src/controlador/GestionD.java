@@ -3,6 +3,7 @@ package controlador;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +17,22 @@ public class GestionD {
 	private List<Atleta> atletasA;
 	private List<Atleta> atletasB;
 	private String pathD = "src/archivos/D.txt";
+	private RandomAccessFile file;
 
-	public GestionD() {
+	public GestionD() throws IOException {
 		competencias = new ArrayList<Competencia>();
 		atletasA = new ArrayList<Atleta>();
 		atletasB = new ArrayList<Atleta>();
 
 		addCompetencia();
+	}
+	
+	public void newRegistro(String nombre, String apellido, String cedula, String codigo, String tinicial, String tfinal, Competencia competencia) {
+		try {
+			
+		} catch (IOException evento) {
+			evento.printStackTrace();
+		}
 	}
 
 	public void addResultado(String tInicial, String tFinal) {
@@ -30,13 +40,15 @@ public class GestionD {
 			Resultado resultado = new Resultado();
 			resultado.settInicial(tInicial);
 			resultado.settFinal(tFinal);
-
-			FileWriter file = new FileWriter(pathD, true);
+			file = new RandomAccessFile(pathD, "rw");
+	//		file.writeUTF(str);
+			
+		/*	FileWriter file = new FileWriter(pathD, true);
 			BufferedWriter out = new BufferedWriter(file);
 			String registro = resultado.gettInicial() + " , " + resultado.gettFinal();
 			out.append(registro + "\n");
 			out.close();
-			file.close();
+			file.close();*/
 		} catch (IOException evento) {
 			evento.printStackTrace();
 		}
@@ -84,7 +96,15 @@ public class GestionD {
 		try {
 			Competencia competencia = new Competencia();
 			competencia.setNombre("Atletismo");
-			competencia.setCategoria("Velocidad");
+			competencia.setCategoria("Senior");
+			competencia.setAtletas(atletasA);
+			competencias.add(competencia);
+
+			saveCompetencia(competencia);
+			
+			competencia = new Competencia();
+			competencia.setNombre("Atletismo");
+			competencia.setCategoria("Juvenil");
 			competencia.setAtletas(atletasA);
 			competencias.add(competencia);
 
@@ -93,6 +113,14 @@ public class GestionD {
 			competencia = new Competencia();
 			competencia.setNombre("Baloncesto");
 			competencia.setCategoria("Juvenil");
+			competencia.setAtletas(atletasB);
+			competencias.add(competencia);
+
+			saveCompetencia(competencia);
+			
+			competencia = new Competencia();
+			competencia.setNombre("Baloncesto");
+			competencia.setCategoria("Senior");
 			competencia.setAtletas(atletasB);
 			competencias.add(competencia);
 
@@ -130,14 +158,13 @@ public class GestionD {
 		return true;
 	}
 
-	public boolean duplicadosCompetencias(String nombre, String categoria) {
+	public Competencia searchCompetencia(String nombre, String categoria) {
 		for (int i = 0; i < competencias.size(); i++) {
-			if (competencias.get(i).getNombre().equals(nombre)
-					&& competencias.get(i).getCategoria().equals(categoria)) {
-				return true;
-			}
+			Competencia c = competencias.get(i);
+			if (c.getNombre().equals(nombre) && c.getCategoria().equals(categoria))
+				return c;
 		}
-		return false;
+		return null;
 	}
 
 	/*

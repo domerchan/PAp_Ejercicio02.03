@@ -1,0 +1,61 @@
+Atletismo , Velocidad , []
+Baloncesto , Juvenil , []
+Atletismo , Velocidad , []
+Baloncesto , Juvenil , []
+fghdgf , sg , rtgfh , gh , modelo.Resultado@4e5f1a61
+Atletismo , Velocidad , []
+Baloncesto , Juvenil , []
+adf , sdfrg , 011066510 , 05651 , modelo.Resultado@5953e286
+difwio , oiedfjm , 06510650 , oguig , modelo.Resultado@6c0cfd66
+sfawefn , oiedfjmiufd , 03513 , oguig20 , modelo.Resultado@673ef20b
+sfawefn , oiedfjmiufd , 03513 , oguig20 , modelo.Resultado@6f054499
+Atletismo , Senior , []
+Atletismo , Juvenil , []
+Baloncesto , Juvenil , []
+Baloncesto , Senior , []
+Atletismo , Senior , []
+Atletismo , Juvenil , []
+Baloncesto , Juvenil , []
+Baloncesto , Senior , []
+Atletismo , Senior , []
+Atletismo , Juvenil , []
+Baloncesto , Juvenil , []
+Baloncesto , Senior , []
+ ,  ,  ,  , modelo.Resultado@39feaef6
+Atletismo , Senior , []
+Atletismo , Juvenil , []
+Baloncesto , Juvenil , []
+Baloncesto , Senior , []
+ ,  ,  ,  , modelo.Resultado@39feaef6
+ ,  ,  ,  , modelo.Resultado@76a3d374
+ ,  ,  ,  , modelo.Resultado@3a665a48
+ ,  ,  ,  , modelo.Resultado@20b83d71
+ ,  ,  ,  , modelo.Resultado@5e43725a
+ ,  ,  ,  , modelo.Resultado@36933295
+ ,  ,  ,  , modelo.Resultado@43edd66e
+ ,  ,  ,  , modelo.Resultado@112e3477
+ ,  ,  ,  , modelo.Resultado@285ce896
+ ,  ,  ,  , modelo.Resultado@3de31189
+ ,  ,  ,  , modelo.Resultado@1010eefd
+ ,  ,  ,  , modelo.Resultado@707dfd04
+ ,  ,  ,  , modelo.Resultado@3f2ab3c5
+ ,  ,  ,  , modelo.Resultado@1a6082f0
+ ,  ,  ,  , modelo.Resultado@d10e047
+ ,  ,  ,  , modelo.Resultado@121aa93c
+ ,  ,  ,  , modelo.Resultado@78c49421
+ ,  ,  ,  , modelo.Resultado@66adfecb
+ ,  ,  ,  , modelo.Resultado@6c352881
+ ,  ,  ,  , modelo.Resultado@2b213f72
+ ,  ,  ,  , modelo.Resultado@7798c3ab
+ ,  ,  ,  , modelo.Resultado@7e4a2035
+ ,  ,  ,  , modelo.Resultado@3bfe7e5d
+ ,  ,  ,  , modelo.Resultado@19061cff
+ ,  ,  ,  , modelo.Resultado@28b211ef
+ ,  ,  ,  , modelo.Resultado@7d6c744
+ ,  ,  ,  , modelo.Resultado@4f924d75
+ ,  ,  ,  , modelo.Resultado@66da519c
+ ,  ,  ,  , modelo.Resultado@5edf09c1
+ ,  ,  ,  , modelo.Resultado@6f0209b9
+ ,  ,  ,  , modelo.Resultado@32a618c9
+ ,  ,  ,  , modelo.Resultado@644f9b0
+ ,  ,  ,  , modelo.Resultado@207379b8
