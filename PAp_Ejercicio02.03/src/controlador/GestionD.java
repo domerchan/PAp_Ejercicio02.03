@@ -14,46 +14,84 @@ import modelo.Resultado;
 public class GestionD {
 
 	private List<Competencia> competencias;
-	private List<Atleta> atletasA;
-	private List<Atleta> atletasB;
+	private List<Atleta> atletasAJ;
+	private List<Atleta> atletasAS;
+	private List<Atleta> atletasBJ;
+	private List<Atleta> atletasBS;
 	private String pathD = "src/archivos/D.txt";
 	private RandomAccessFile file;
 
 	public GestionD() throws IOException {
 		competencias = new ArrayList<Competencia>();
-		atletasA = new ArrayList<Atleta>();
-		atletasB = new ArrayList<Atleta>();
+		atletasAJ = new ArrayList<Atleta>();
+		atletasBJ = new ArrayList<Atleta>();
+		atletasAS = new ArrayList<Atleta>();
+		atletasBS = new ArrayList<Atleta>();
 
 		addCompetencia();
 	}
 	
-	public void newRegistro(String nombre, String apellido, String cedula, String codigo, String tinicial, String tfinal, Competencia competencia) {
+	public void newRegistro(String nombre, String apellido, String cedula, String codigo, String tinicial,
+			String tfinal, String cnombre, String categoria) throws IOException {
 		try {
+			Atleta atleta = new Atleta();
+			Resultado resultado = new Resultado();
+			Competencia competencia = searchCompetencia(cnombre, categoria);
+			competencias.add(competencia);
+
+			resultado.settInicial(tinicial);
+			resultado.settFinal(tfinal);
+			
+			atleta.setNombre(nombre);
+			atleta.setApellido(apellido);
+			atleta.setCedula(cedula);
+			atleta.setCodigo(codigo);
+			atleta.setResultado(resultado);
+			
+			if (competencias.get(0).getNombre().equals(competencia))
+				if (competencias.get(0).getCategoria().equals("Juvenil"))
+					atletasAJ.add(atleta);
+				else
+					atletasAS.add(atleta);
+			else if (competencias.get(1).getNombre().equals(competencia))
+				if (competencias.get(1).getCategoria().equals("Juvenil"))
+					atletasBJ.add(atleta);
+				else
+					atletasBS.add(atleta);
+			
+			file = new RandomAccessFile(pathD, "rw");
+			file.writeUTF(nombre);
+			file.writeUTF(apellido);
+			file.writeUTF(cedula);
+			file.writeUTF(codigo);
+			file.writeUTF(tinicial);
+			file.writeUTF(tfinal);
+			file.writeUTF(cnombre);
+			file.writeUTF(categoria);
+			
 			
 		} catch (IOException evento) {
 			evento.printStackTrace();
+		} finally {
+			file.close();
 		}
 	}
+	
+	public RandomAccessFile getFile() {
+		return file;
+	}
 
-	public void addResultado(String tInicial, String tFinal) {
+/*	public void addResultado(String tInicial, String tFinal) throws IOException {
 		try {
 			Resultado resultado = new Resultado();
 			resultado.settInicial(tInicial);
 			resultado.settFinal(tFinal);
-			file = new RandomAccessFile(pathD, "rw");
-	//		file.writeUTF(str);
-			
-		/*	FileWriter file = new FileWriter(pathD, true);
-			BufferedWriter out = new BufferedWriter(file);
-			String registro = resultado.gettInicial() + " , " + resultado.gettFinal();
-			out.append(registro + "\n");
-			out.close();
-			file.close();*/
 		} catch (IOException evento) {
 			evento.printStackTrace();
 		}
 	}
-
+*/
+	
 	public void addAtleta(String nombre, String apellido, String cedula, String codigo, String inicio, String fin,
 			String competencia) {
 		try {
@@ -67,9 +105,9 @@ public class GestionD {
 			resultado.settFinal(fin);
 			atleta.setResultado(resultado);
 			if (competencias.get(0).getNombre().equals(competencia))
-				atletasA.add(atleta);
+				atletasAJ.add(atleta);
 			else if (competencias.get(1).getNombre().equals(competencia))
-				atletasB.add(atleta);
+				atletasBJ.add(atleta);
 			FileWriter file = new FileWriter(pathD, true);
 			BufferedWriter out = new BufferedWriter(file);
 			String registro = atleta.getNombre() + " , " + atleta.getApellido() + " , " + atleta.getCedula() + " , "
@@ -97,7 +135,7 @@ public class GestionD {
 			Competencia competencia = new Competencia();
 			competencia.setNombre("Atletismo");
 			competencia.setCategoria("Senior");
-			competencia.setAtletas(atletasA);
+			competencia.setAtletas(atletasAS);
 			competencias.add(competencia);
 
 			saveCompetencia(competencia);
@@ -105,7 +143,7 @@ public class GestionD {
 			competencia = new Competencia();
 			competencia.setNombre("Atletismo");
 			competencia.setCategoria("Juvenil");
-			competencia.setAtletas(atletasA);
+			competencia.setAtletas(atletasAJ);
 			competencias.add(competencia);
 
 			saveCompetencia(competencia);
@@ -113,7 +151,7 @@ public class GestionD {
 			competencia = new Competencia();
 			competencia.setNombre("Baloncesto");
 			competencia.setCategoria("Juvenil");
-			competencia.setAtletas(atletasB);
+			competencia.setAtletas(atletasBJ);
 			competencias.add(competencia);
 
 			saveCompetencia(competencia);
@@ -121,7 +159,7 @@ public class GestionD {
 			competencia = new Competencia();
 			competencia.setNombre("Baloncesto");
 			competencia.setCategoria("Senior");
-			competencia.setAtletas(atletasB);
+			competencia.setAtletas(atletasBS);
 			competencias.add(competencia);
 
 			saveCompetencia(competencia);
@@ -133,20 +171,21 @@ public class GestionD {
 
 	public List<Atleta> listAtletas(String competencia) {
 		if (competencias.get(0).getNombre().equals(competencia))
-			return atletasA;
+			return atletasAJ;
 		else if (competencias.get(1).getNombre().equals(competencia))
-			return atletasB;
+			return atletasBJ;
 		return null;
 	}
 
 	public String[] getCompetencias() {
 		String[] lista = new String[competencias.size()];
+		System.out.println(competencias.size());
 		for (int i = 0; i < competencias.size(); i++)
 			lista[i] = competencias.get(i).getNombre();
 		return lista;
 	}
 
-	public boolean isCedulaValida(String cedula) throws Exception {
+	public boolean validarCedula(String cedula) throws Exception {
 		try {
 			int a = Integer.parseInt(cedula);
 		} catch (NumberFormatException e) {
@@ -154,10 +193,27 @@ public class GestionD {
 		}
 		if (cedula.length() != 10)
 			throw new Exception("Debe ser de 10 dígitos");
-
 		return true;
 	}
 
+	public boolean validarCodigo(String codigo) throws Exception {
+		if (codigo.length() != 5)
+			throw new Exception("Código inválido");
+		return true;
+	}
+	
+	public boolean validarTiempo(String tiempo) throws Exception {
+		if (tiempo.length() != 5)
+			throw new Exception("Tiempo inválido");
+		return true;
+	}
+	
+	public String complete(String dato) {
+		for (int i = dato.length() + 1; i < 11; i++)
+			dato = dato + " ";
+		return dato;
+	}
+	
 	public Competencia searchCompetencia(String nombre, String categoria) {
 		for (int i = 0; i < competencias.size(); i++) {
 			Competencia c = competencias.get(i);

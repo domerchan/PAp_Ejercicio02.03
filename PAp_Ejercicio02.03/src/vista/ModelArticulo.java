@@ -14,6 +14,7 @@ public class ModelArticulo extends AbstractTableModel {
 	private Locale localizacion = Ventana.localizacion;
 	private ResourceBundle lang = ResourceBundle.getBundle("lang.mensajes", localizacion);
 	private List<Articulo> datos;
+	private String articulo;
 	public String[] columnas = {lang.getString("Titulo"), lang.getString("Autor"), lang.getString("Inicio"), lang.getString("Final") };
 	public Class[] columnasTipos = {String.class, String.class, String.class, String.class};
 	
@@ -30,6 +31,7 @@ public class ModelArticulo extends AbstractTableModel {
 			this.datos = new ArrayList<Articulo>();
 		else
 			this.datos = datos;
+		this.articulo = articulo;
 	}
 	
 	public int getColumnCount() {
@@ -54,32 +56,20 @@ public class ModelArticulo extends AbstractTableModel {
 		
 		switch(col) {
 		case 0:
-			return dato.getTitulo();
+			return row + 1;
 		case 1:
-			return dato.getAutor().getSeudonimo();
+			return articulo;	
 		case 2:
+			return dato.getTitulo();
+		case 3:
+			return dato.getAutor().getSeudonimo();
+		case 4:
 			return dato.getpInicio();
-		case 3: 
+		case 5: 
 			return dato.getpFinal();
 		default:
 			break;
 		}
 		return new String();
 	}
-	
-	/*
-	 * ESPAÑOL 
-	 Titulo Título 
-	 Inicio Página Inicial
-	 Final Página Final
-	 Autor Autor
-	  
-	 * INGLES 
-	 Titulo Title
-	 Inicio Initial Page
-	 Final Final Page
-	 Autor Author
-	 
-	 */
-	
 }

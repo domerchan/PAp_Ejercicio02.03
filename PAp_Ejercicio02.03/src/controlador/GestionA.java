@@ -1,13 +1,13 @@
 package controlador;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import modelo.Articulo;
 import modelo.Autor;
 import modelo.Revista;
@@ -17,7 +17,7 @@ public class GestionA {
 	private List<Articulo> articulos;
 	private List<Autor> autores;
 	private Revista revista;
-	private String pathA = "src/archivos/A.txt";
+	
 	
 	public GestionA() {
 		articulos = new ArrayList<Articulo>();
@@ -28,7 +28,7 @@ public class GestionA {
 	
 	public void addArticulo(String titulo, String resumen, String pInicio, String pFinal,
 			String nombre, String apellido, String cedula, String nacionalidad, String seudonimo) {
-		try {
+		
 			Autor autor1 = new Autor();
 			autor1.setNombre(nombre);
 			autor1.setApellido(apellido);
@@ -43,44 +43,22 @@ public class GestionA {
 			articulo.setpInicio(pInicio);
 			articulo.setpFinal(pFinal);
 			articulos.add(articulo);
-
-			FileWriter file = new FileWriter(pathA, true);
-			BufferedWriter out = new BufferedWriter(file);
-			String registro = articulo.getTitulo() + " , " + articulo.getAutor() + " ; " + articulo.getResumen() + " , "
-					+ articulo.getpInicio() + " ; " + articulo.getpFinal();
-			out.append(registro + "\n");
-			out.close();
-			file.close();
-		} catch (IOException evento) {
-			evento.printStackTrace();
-		}
+			
+			
 	}
 	
 	public void addRevista() {
-		try {
+	
 		revista = new Revista();
 		revista.setNombre("Nature");
 		revista.setnEdicion("204");
 		revista.setIdioma("Inglés");
 		revista.setArticulos(articulos);
 		
-		FileWriter file = new FileWriter(pathA, true);
-		BufferedWriter out = new BufferedWriter(file);
-		String registro = revista.getNombre()+" , "+revista.getnEdicion()+" , "+revista.getIdioma()+" , "+revista.getArticulos();
-		out.append(registro + "\n");
-		out.close();
-		file.close();
-		}catch (IOException evento){
-			evento.printStackTrace();
-		}
 	}
 	
 	public Revista getRevista() {
 		return revista;
-	}
-	
-	public List<Articulo> getArticulos() {
-		return articulos;
 	}
 	
 	public boolean isCedulaValida(String cedula) throws Exception{
@@ -112,5 +90,104 @@ public class GestionA {
 		}
 		return false;
 	}
+	
+	public boolean listAutores(List<Autor> autores) throws Exception {
+        boolean retorno=true;
+        File directorio=new File("C:/Autor");
+        System.out.print((directorio.getPath()));
+        if(!directorio.exists()) {
+            directorio.mkdir();
+        }
+        for(Autor autor:autores) {
+            try {
+               FileOutputStream fo=new   FileOutputStream("C:/Autor/AutoresDescripcion.dat",true);
+               DataOutputStream escritura= new DataOutputStream (fo);
+               escritura.writeUTF(autor.getNombre());
+               escritura.writeUTF(autor.getApellido());
+               escritura.writeUTF(autor.getNacionalidad());
+               escritura.writeUTF(autor.getSeudonimo());
+               escritura.writeUTF(autor.getCedula());
+               escritura.close();
+               retorno=true;
+            }catch(EOFException e1) {
+                retorno=false;
+            }
+        }
+        
+        return retorno;
+    }
+	
+	public List<Autor> leeAutores() throws Exception{
+        List<Autor> autor = new ArrayList<Autor>();
+        try {
+            FileInputStream fs=new   FileInputStream("C:/Autor/AutoresDescripcion.dat");
+            DataInputStream autores= new DataInputStream (fs);
+            
+            while(true) {
+            	
+            	String nombre =  autores.readUTF();
+            	String apellido = autores.readUTF();
+            	String nacionalidad = autores.readUTF();
+            	String pseudonimo = autores.readUTF();
+            	String cedula = autores.readUTF();
+                
+                Autor autores1 = new Autor (nombre,apellido,nacionalidad,pseudonimo,cedula);	
+                autor.add(autores1);  
+            }
+           
+        }catch(EOFException e1){
+           e1.printStackTrace();
+        }
+        return autor;
+    }
+	
+	public boolean listArticulos(List<Articulo> articulos) throws Exception {
+        boolean retorno=true;
+        File directorio=new File("C:/Articulo");
+        System.out.print((directorio.getPath()));
+        if(!directorio.exists()) {
+            directorio.mkdir();
+        }
+        for(Articulo articulo:articulos) {
+            try {
+               FileOutputStream fo=new   FileOutputStream("C:/Articulo/ArticulosDescripcion.dat",true);
+               DataOutputStream escritura= new DataOutputStream (fo);
+               escritura.writeUTF(articulo.getTitulo());
+               escritura.writeUTF(articulo.getResumen());
+               escritura.writeUTF(articulo.getpInicio());
+               escritura.writeUTF(articulo.getpFinal());
+               escritura.writeUTF(articulo.getAutor().getNombre());
+               escritura.close();
+               retorno=true;
+            }catch(EOFException e1) {
+                retorno=false;
+            }
+        }
+        
+        return retorno;
+    }
+	
+	 public List<Articulo> leeArticulo() throws Exception{
+	        List<Articulo> articulo = new ArrayList<Articulo>();
+	        try {
+	            FileInputStream fs=new   FileInputStream("C:/Articulo/ArticulosDescripcion.dat");
+	            DataInputStream articulodes= new DataInputStream (fs);
+	            
+	            while(true) {
+	            	String titulo = articulodes.readUTF();
+	                String resumen = articulodes.readUTF();
+	                String inicio = articulodes.readUTF();
+	                String final1 = articulodes.readUTF();
+	                //String nombre = articulodes.readUTF();
+	                
+	                Articulo articuloa = new Articulo (titulo,resumen,inicio,final1,null);	             
+	                articulo.add(articuloa);  
+	            }
+	           
+	        }catch(EOFException e1){
+	           e1.printStackTrace();
+	        }
+	        return articulo;
+	    }
 	
 }

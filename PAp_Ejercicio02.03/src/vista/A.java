@@ -144,7 +144,11 @@ public class A extends JInternalFrame implements ActionListener {
 		switch (command) {
 		case "Guardar":
 			newArticulo();
-			tblArticulo.setModel(new ModelArticulo(ga.getArticulos()));
+			try {
+				tblArticulo.setModel(new ModelArticulo(ga.leeArticulo()));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			break;
 		case "Limpiar":
 			limpiar();

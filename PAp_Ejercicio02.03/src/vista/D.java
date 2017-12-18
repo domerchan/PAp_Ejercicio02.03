@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -32,8 +34,9 @@ public class D extends JInternalFrame implements ActionListener {
 	private JTextField txtInicio;
 	private JTextField txtFin;
 	private JComboBox cbxCompetencia;
+	private JComboBox cbxCategoria;
 	private JTable tblAtleta;
-	
+
 	public D(GestionD gd) {
 
 		Locale localizacion = Ventana.localizacion;
@@ -46,11 +49,11 @@ public class D extends JInternalFrame implements ActionListener {
 		c.setLayout(new BorderLayout());
 
 		JPanel pnlD = new JPanel();
-		pnlD.setLayout(new GridLayout(2,1));
-		
+		pnlD.setLayout(new GridLayout(2, 1));
+
 		JPanel pnlDatos = new JPanel();
 		pnlDatos.setBorder(BorderFactory.createEmptyBorder());
-		pnlDatos.setLayout(new GridLayout(4,4));
+		pnlDatos.setLayout(new GridLayout(4, 4));
 		pnlDatos.add(new JLabel(lang.getString("Nombre") + ": "));
 		txtNombre = new JTextField(20);
 		pnlDatos.add(txtNombre);
@@ -60,27 +63,32 @@ public class D extends JInternalFrame implements ActionListener {
 		pnlDatos.add(new JLabel(lang.getString("Cedula") + ": "));
 		txtCedula = new JTextField(20);
 		pnlDatos.add(txtCedula);
-		pnlDatos.add(new JLabel(lang.getString("Codigo") + ": "));
+		pnlDatos.add(new JLabel(lang.getString("Codigo") + ": ej.(AA-11)"));
 		txtCodigo = new JTextField(20);
 		pnlDatos.add(txtCodigo);
-		pnlDatos.add(new JLabel(lang.getString("Inicial") + ": "));
+		pnlDatos.add(new JLabel(lang.getString("Inicial") + ": ej.(00:00)"));
 		txtInicio = new JTextField(20);
 		pnlDatos.add(txtInicio);
-		pnlDatos.add(new JLabel(lang.getString("Fin") + ": "));
+		pnlDatos.add(new JLabel(lang.getString("Fin") + ": ej.(15:27)"));
 		txtFin = new JTextField(20);
 		pnlDatos.add(txtFin);
 		pnlDatos.add(new JLabel(lang.getString("Competencia") + ": "));
-		String[] competencias = gd.getCompetencias();
+		String[] competencias = { "Atletismo", "Baloncesto" };
 		cbxCompetencia = new JComboBox(competencias);
 		pnlDatos.add(cbxCompetencia);
-		
+		pnlDatos.add(new JLabel(lang.getString("Categoria") + ": "));
+		String[] categorias = { "Juvenil", "Senior" };
+		cbxCategoria = new JComboBox(categorias);
+		pnlDatos.add(cbxCategoria);
+
 		tblAtleta = new JTable();
-		tblAtleta.setModel(new ModelAtleta());
+		RandomAccessFile file = gd.getFile();
+		tblAtleta.setModel(new ModelAtleta(file));
 		JScrollPane sAtleta = new JScrollPane(tblAtleta);
 
 		pnlD.add(pnlDatos);
 		pnlD.add(sAtleta);
-		
+
 		JPanel pnlButton = new JPanel();
 		btnCargar = new JButton(lang.getString("Cargar"));
 		btnCargar.addActionListener(this);
@@ -88,13 +96,13 @@ public class D extends JInternalFrame implements ActionListener {
 		btnLimpiar = new JButton(lang.getString("Limpiar"));
 		btnLimpiar.addActionListener(this);
 		btnLimpiar.setActionCommand("Limpiar");
-		
+
 		pnlButton.add(btnCargar);
 		pnlButton.add(btnLimpiar);
-		
+
 		c.add(pnlD, BorderLayout.CENTER);
 		c.add(pnlButton, BorderLayout.SOUTH);
-		
+
 	}
 
 	public void limpiar() {
@@ -105,18 +113,32 @@ public class D extends JInternalFrame implements ActionListener {
 		txtInicio.setText("");
 		txtFin.setText("");
 	}
-	
-	public void newAtleta() {
-		gd.addAtleta(txtNombre.getText(), txtApellido.getText(), txtCedula.getText(), txtCodigo.getText(), txtInicio.getText(), txtFin.getText(), cbxCompetencia.getSelectedItem().toString());
+
+	public void newRegistro() {
+		try {
+			String nombre = gd.complete(txtNombre.getText().toString());
+			String apellido = gd.complete(txtApellido.getText().toString());
+			String competencia = gd.complete(cbxCompetencia.getSelectedItem().toString());
+			String categoria = gd.complete(cbxCategoria.getSelectedItem().toString());
+			gd.validarCedula(txtCedula.getText().toString());
+			gd.validarCodigo(txtCodigo.getText().toString());
+			gd.validarTiempo(txtInicio.getText().toString());
+			gd.validarTiempo(txtFin.getText().toString());
+			gd.newRegistro(nombre, apellido, txtCedula.getText().toString(), txtCodigo.getText().toString(),
+					txtInicio.getText().toString(), txtFin.getText().toString(), competencia, categoria);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	@Override
+
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		switch (command) {
 		case "Cargar":
-			newAtleta();
-			tblAtleta.setModel(new ModelAtleta(gd.listAtletas(cbxCompetencia.getSelectedItem().toString()), cbxCompetencia.getSelectedItem().toString()));
+			newRegistro();
+			tblAtleta.setModel(new ModelAtleta(gd.listAtletas(cbxCompetencia.getSelectedItem().toString())));
 			break;
 		case "Limpiar":
 			limpiar();
