@@ -14,6 +14,8 @@ import modelo.Revista;
 
 public class GestionA {
 	
+	//EVELYN
+	
 	private List<Articulo> articulos;
 	private List<Autor> autores;
 	private Revista revista;
@@ -23,7 +25,6 @@ public class GestionA {
 		articulos = new ArrayList<Articulo>();
 		autores = new ArrayList<Autor>();
 		addRevista();
-
 	}
 	
 	public void addArticulo(String titulo, String resumen, String pInicio, String pFinal,

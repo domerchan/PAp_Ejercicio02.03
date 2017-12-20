@@ -12,6 +12,8 @@ import modelo.Competencia;
 import modelo.Resultado;
 
 public class GestionD {
+	
+	//DOMENICA
 
 	private List<Competencia> competencias;
 	private List<Atleta> atletasAJ;
